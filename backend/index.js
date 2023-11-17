@@ -2,6 +2,7 @@ import OpenAI from "openai";
 
 import {
   systemPrompt,
+  characterPrompt,
   backstoryPrompt,
   recipePrompt,
 } from "./utils/prompts/templates";
@@ -15,27 +16,37 @@ const server = Bun.serve({
   port: 3000,
   fetch: async (req) => {
     const url = new URL(req.url);
-    if (url.pathname === "/generatecharacter") {
+    if (url.pathname === "/api/generatecharacter") {
       // Clear chat history
       chatHistory.length = 0;
 
       // Declare system message
       chatHistory.push({ role: "system", content: `${systemPrompt}` });
-      chatHistory.push({ role: "user", content: `${backstoryPrompt}` });
+
+      // Generate character description
+      console.log("Generating character...");
+      chatHistory.push({ role: "user", content: `${characterPrompt}` });
+      const description = await generateCompletion(chatHistory);
+      chatHistory.push({ role: "assistant", content: `${description}` });
+
+      // Generate character image
+      console.log("Generating image...");
+      const image = await generateImage(description);
+      // const image = "cat.png";
 
       // Generate character backstory
+      console.log("Generating backstory...");
+      chatHistory.push({ role: "user", content: `${backstoryPrompt}` });
       const backstory = await generateCompletion(chatHistory);
       chatHistory.push({ role: "assistant", content: `${backstory}` });
 
-      // Generate character image
-      //   const imageUrl = await generateImage(backstory);
-      const imageUrl = "cat.png";
+      console.log("Returning response...");
 
-      return new Response(JSON.stringify({ backstory, imageUrl }), {
+      return new Response(JSON.stringify({ backstory, image }), {
         headers: { "Content-Type": "application/json" },
       });
     }
-    if (url.pathname === "/generaterecipe") {
+    if (url.pathname === "/api/generaterecipe") {
       // Extract user-inputted ingredients from request
       const ingredients = req.body.ingredients;
       const combinedPrompt = recipePrompt + ingredients;
