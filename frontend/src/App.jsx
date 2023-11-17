@@ -30,17 +30,16 @@ function App() {
       <h1>Paws and Pans</h1>
       <p>
         Welcome to Paws and Pans! 🐾🍳 Enter the ingredients you have at hand,
-        and your furry kitchen helper will guide you through a delicious
-        recipe!
+        and your furry kitchen helper will guide you through a delicious recipe!
       </p>
       <p>
         {charStory && (
           <>
-              <img
-                src={charImage}
-                alt="Your furry kitchen helper"
-                style={{ height: "300px" }}
-              />
+            <img
+              src={charImage}
+              alt="Your furry kitchen helper"
+              style={{ height: "300px" }}
+            />
             <br />
             <span>
               <strong>{charStory}</strong>
@@ -49,7 +48,7 @@ function App() {
         )}
       </p>
       <div>
-        <IngredientsForm />
+        <IngredientsForm generateRecipe={generateService.getRecipe} />
       </div>
     </>
   );

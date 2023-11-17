@@ -11,10 +11,19 @@ const getCharacter = async () => {
 };
 
 const getRecipe = async ({ ingredients }) => {
-  const response = await axios.post(`${baseUrl}/generaterecipe`, {
-    ingredients,
-  });
-  return response.data;
+  const response = await axios.post(
+    `${baseUrl}/generaterecipe`,
+    {
+      ingredients,
+    },
+    {
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    }
+  );
+  console.log(response.data.recipe);
+  return response.data.recipe;
 };
 
 export default { getCharacter, getRecipe };
