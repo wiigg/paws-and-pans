@@ -33,30 +33,47 @@ function IngredientsForm({ generateRecipe }) {
   }
 
   return (
-    <div>
-      <h2>Enter your ingredients:</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-md mx-auto my-8">
+      <h2 className="text-2xl font-semibold text-center text-indigo-600 mb-4">
+        enter your ingredients
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {ingredientList.map((ingredient, index) => (
-          <div key={index}>
+          <div key={index} className="flex items-center space-x-2">
             <input
               type="text"
               value={ingredient}
               onChange={(e) => handleIngredientChange(e, index)}
+              className="flex-1 p-2 border border-gray-300 rounded"
+              placeholder="ingredient"
             />
           </div>
         ))}
-        <button type="button" onClick={handleAddIngredient}>
+        <button
+          type="button"
+          onClick={handleAddIngredient}
+          className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
           Add Another
         </button>
-        <div>
-          <button type="submit">Generate!</button>
+        <div className="text-center mt-6">
+          <button
+            type="submit"
+            className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Generate!
+          </button>
         </div>
       </form>
-      <div>
+      <div className="mt-8">
         {recipe && (
           <>
-            <h2>Here is your recipe!</h2>
-            <div>{renderTextWithLineBreaks(recipe)}</div>
+            <h2 className="text-2xl font-semibold text-center text-indigo-600 mb-4">
+              Ta-dah 🎉 Here is your recipe!
+            </h2>
+            <div className="p-4 border border-gray-200 rounded">
+              {renderTextWithLineBreaks(recipe)}
+            </div>
           </>
         )}
       </div>
