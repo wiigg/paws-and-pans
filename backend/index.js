@@ -31,8 +31,8 @@ const server = Bun.serve({
 
       // Generate character image
       console.log("Generating image...");
-      // const image = await generateImage(description);
-      const image = "cat.png";
+      const image = await generateImage(description);
+      // const image = "cat.png";
 
       // Generate character backstory
       console.log("Generating backstory...");
@@ -45,24 +45,22 @@ const server = Bun.serve({
       return new Response(JSON.stringify({ backstory, image }), {
         headers: { "Content-Type": "application/json" },
       });
-      // return new Response("some response");
     }
-    if (url.pathname === "/api/generaterecipe") {
-      let chunks = [];
-      for await (const chunk of req.body) {
-        chunks.push(chunk);
-      }
 
-      let body = Buffer.concat(chunks).toString("utf-8"); // Convert byte array to string
-      const parsedBody = JSON.parse(body); // Parse string as JSON
-      const ingredientsArray = parsedBody.ingredients;
-      const ingredients = ingredientsArray.join(", ");
+    if (url.pathname === "/api/generaterecipe") {
+      const body = await req.json();
+      const ingredientsList = body.ingredients;
+
+      // convert ingredients list to string
+      const ingredients = ingredientsList.join(", ");
 
       // Generate recipe
       console.log("Generating recipe...");
       const combinedPrompt = recipePrompt + ingredients;
       chatHistory.push({ role: "user", content: `${combinedPrompt}` });
       const recipe = await generateCompletion(chatHistory);
+
+      // const recipe = "recipe";
 
       console.log("Returning recipe...");
 

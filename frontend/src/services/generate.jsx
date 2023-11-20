@@ -18,11 +18,11 @@ const getRecipe = async ({ ingredients }) => {
     },
     {
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       },
     }
   );
-  console.log(response.data.recipe);
+  
   return response.data.recipe;
 };
 
