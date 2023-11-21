@@ -15,6 +15,16 @@ const chatHistory = [];
 const server = Bun.serve({
   port: 3000,
   fetch: async (req) => {
+    if (req.method === "OPTIONS") {
+      return new Response("", {
+        headers: {
+          "Access-Control-Allow-Origin": "*", // For development; specify exact origins in production
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      });
+    }
+
     const url = new URL(req.url);
     if (url.pathname === "/api/generatecharacter") {
       // Clear chat history
@@ -43,11 +53,15 @@ const server = Bun.serve({
       console.log("Returning character...");
 
       return new Response(JSON.stringify({ backstory, image }), {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
       });
     }
 
     if (url.pathname === "/api/generaterecipe") {
+      console.log(req);
       const body = await req.json();
       const ingredientsList = body.ingredients;
 
@@ -65,7 +79,10 @@ const server = Bun.serve({
       console.log("Returning recipe...");
 
       return new Response(JSON.stringify({ recipe }), {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
       });
     }
   },

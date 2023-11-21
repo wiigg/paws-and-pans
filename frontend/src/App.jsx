@@ -31,8 +31,8 @@ function App() {
         Paws and Pans
       </h1>
       <p className="text-center text-lg text-gray-700">
-        Welcome to Paws and Pans! 🐾🍳 Enter the ingredients you have at hand,
-        and your furry kitchen helper will guide you through a delicious recipe!
+        Enter the ingredients you have at hand, and your furry kitchen helper
+        will guide you through a delicious recipe! 🐾🍳
       </p>
       <div className="text-center my-4">
         {charStory && (
