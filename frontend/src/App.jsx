@@ -6,8 +6,12 @@ import IngredientsForm from "./components/IngredientsForm";
 import generateService from "./services/generate";
 
 function App() {
+  const [charDescription, setCharDescription] = useState(null);
   const [charStory, setCharStory] = useState(null);
   const [charImage, setCharImage] = useState(null);
+
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isLoadingBackstory, setIsLoadingBackstory] = useState(false);
 
   const generateCharacter = useQuery(
     "generateCharacter",
@@ -18,26 +22,31 @@ function App() {
     }
   );
 
-  const generateBackstory = useQuery(
-    "generateBackstory",
-    generateService.getBackstory,
-    {
-      refetchOnWindowFocus: false,
-      retry: 1,
-    }
-  );
-
   useEffect(() => {
     if (generateCharacter.data) {
-      setCharImage(generateCharacter.data);
+      setCharDescription(generateCharacter.data);
     }
   }, [generateCharacter.data]);
 
   useEffect(() => {
-    if (generateBackstory.data) {
-      setCharStory(generateBackstory.data);
+    setIsLoadingImage(true);
+    if (charDescription) {
+      generateService.getImage(charDescription).then((data) => {
+        setCharImage(data);
+        setIsLoadingImage(false);
+      });
     }
-  }, [generateBackstory.data]);
+  }, [charDescription]);
+
+  useEffect(() => {
+    setIsLoadingBackstory(true);
+    if (charDescription) {
+      generateService.getBackstory(charDescription).then((data) => {
+        setCharStory(data);
+        setIsLoadingBackstory(false);
+      });
+    }
+  }, [charDescription]);
 
   return (
     <div className="container mx-auto px-4">
@@ -49,18 +58,22 @@ function App() {
         will guide you through a delicious recipe! 🐾🍳
       </p>
       <div className="text-center my-4">
-        {charImage && (
-          <img
-            src={charImage}
-            alt="Your furry kitchen helper"
-            className="mx-auto h-72 shadow-lg border border-gray-200"
-          />
-        )}
-        {charStory && (
-          <p className="text-md text-gray-600 font-semibold mt-2">
-            {charStory}
-          </p>
-        )}
+      {isLoadingImage ? (
+        <div>Loading image...</div> // or use a spinner component
+      ) : charImage ? (
+        <img
+          src={charImage}
+          alt="Your furry kitchen helper"
+          className="mx-auto h-72 shadow-lg border border-gray-200"
+        />
+      ) : null}
+      {isLoadingBackstory ? (
+        <div>Loading story...</div> // or use a spinner component
+      ) : charStory ? (
+        <p className="text-md text-gray-600 font-semibold mt-2">
+          {charStory}
+        </p>
+      ) : null}
       </div>
       <div className="flex justify-center">
         <IngredientsForm generateRecipe={generateService.getRecipe} />

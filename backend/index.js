@@ -26,6 +26,8 @@ const server = Bun.serve({
     }
 
     const url = new URL(req.url);
+
+    // generate character description
     if (url.pathname === "/api/generatecharacter") {
       // Clear chat history
       chatHistory.length = 0;
@@ -39,12 +41,26 @@ const server = Bun.serve({
       const description = await generateCompletion(chatHistory);
       chatHistory.push({ role: "assistant", content: `${description}` });
 
-      // Generate character image
+      console.log("Returning character...");
+      return new Response(JSON.stringify({ description }), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
+
+    // generate image
+    if (url.pathname === "/api/generateimage") {
+      const body = await req.json();
+      console.log(body);
+      const prompt = body.character;
+
       console.log("Generating image...");
-      const image = await generateImage(description);
+      const image = await generateImage(prompt);
       // const image = "cat.png";
 
-      console.log("Returning character...");
+      console.log("Returning image...");
       return new Response(JSON.stringify({ image }), {
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +70,9 @@ const server = Bun.serve({
     }
 
     if (url.pathname === "/api/generatebackstory") {
+      // const body = await req.json();
+      // const prompt = body.character;
+
       console.log("Generating backstory...");
       chatHistory.push({ role: "user", content: `${backstoryPrompt}` });
       const backstory = await generateCompletion(chatHistory);
@@ -80,8 +99,6 @@ const server = Bun.serve({
       const combinedPrompt = recipePrompt + ingredients;
       chatHistory.push({ role: "user", content: `${combinedPrompt}` });
       const recipe = await generateCompletion(chatHistory);
-
-      // const recipe = "recipe";
 
       console.log("Returning recipe...");
 
