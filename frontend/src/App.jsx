@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
 import { useState } from "react";
+import { useEffect } from "react";
 
 import IngredientsForm from "./components/IngredientsForm";
 import generateService from "./services/generate";
-import { useEffect } from "react";
 
 function App() {
   const [charStory, setCharStory] = useState(null);
@@ -18,12 +18,26 @@ function App() {
     }
   );
 
+  const generateBackstory = useQuery(
+    "generateBackstory",
+    generateService.getBackstory,
+    {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    }
+  );
+
   useEffect(() => {
     if (generateCharacter.data) {
-      setCharStory(generateCharacter.data.backstory);
-      setCharImage(generateCharacter.data.image);
+      setCharImage(generateCharacter.data);
     }
   }, [generateCharacter.data]);
+
+  useEffect(() => {
+    if (generateBackstory.data) {
+      setCharStory(generateBackstory.data);
+    }
+  }, [generateBackstory.data]);
 
   return (
     <div className="container mx-auto px-4">
@@ -35,18 +49,17 @@ function App() {
         will guide you through a delicious recipe! 🐾🍳
       </p>
       <div className="text-center my-4">
+        {charImage && (
+          <img
+            src={charImage}
+            alt="Your furry kitchen helper"
+            className="mx-auto h-72 shadow-lg border border-gray-200"
+          />
+        )}
         {charStory && (
-          <>
-            <img
-              src={charImage}
-              alt="Your furry kitchen helper"
-              className="mx-auto h-72 shadow-lg border border-gray-200"
-            />
-            <br />
-            <p className="text-md text-gray-600 font-semibold mt-2">
-              {charStory}
-            </p>
-          </>
+          <p className="text-md text-gray-600 font-semibold mt-2">
+            {charStory}
+          </p>
         )}
       </div>
       <div className="flex justify-center">

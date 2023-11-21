@@ -5,7 +5,7 @@ const characterPrompt =
   "Generate a vivid description of an uncommon, friendly and furry animal character, the star of a cooking show, ensuring it exudes a warm and engaging personality. " +
   "This description should include specific details like the animal's species, colours, attire, and any distinctive features or accessories that relate to cooking. " +
   "The character should have a fun and interesting name. " +
-  "The description should be no more than 3 sentences.";
+  "The description should be no more than 100 words.";
 
 const backstoryPrompt =
   "Craft an imaginative backstory for the character, highlighting their culinary expertise, personality traits, and any fun facts or quirks. " +
@@ -13,7 +13,7 @@ const backstoryPrompt =
   "Ensure the backstory is consistent with the character description. " +
   "The story should be engaging and add depth to the character, enhancing the user's connection with their furry chef. " +
   "The story should be crafted to ensure the character is friendly, appealing, and suitable for a family-friendly audience. " +
-  "The backstory should be no more than 3 sentences.";
+  "The backstory should be no more than 100 words.";
 
 const recipePrompt =
   "Based on the user-provided list of ingredients, formulate a recipe suggestion. The recipe should be creative yet feasible, considering the ingredients listed. " +

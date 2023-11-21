@@ -44,15 +44,23 @@ const server = Bun.serve({
       const image = await generateImage(description);
       // const image = "cat.png";
 
-      // Generate character backstory
+      console.log("Returning character...");
+      return new Response(JSON.stringify({ image }), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+    }
+
+    if (url.pathname === "/api/generatebackstory") {
       console.log("Generating backstory...");
       chatHistory.push({ role: "user", content: `${backstoryPrompt}` });
       const backstory = await generateCompletion(chatHistory);
       chatHistory.push({ role: "assistant", content: `${backstory}` });
 
-      console.log("Returning character...");
-
-      return new Response(JSON.stringify({ backstory, image }), {
+      console.log("Returning backstory...");
+      return new Response(JSON.stringify({ backstory }), {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",

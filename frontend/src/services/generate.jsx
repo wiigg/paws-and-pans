@@ -5,9 +5,13 @@ const baseUrl = "http://localhost:3000/api";
 const getCharacter = async () => {
   const response = await axios.get(`${baseUrl}/generatecharacter`);
 
-  const { backstory, image } = response.data;
+  return response.data.image;
+};
 
-  return { backstory, image };
+const getBackstory = async () => {
+  const response = await axios.get(`${baseUrl}/generatebackstory`);
+
+  return response.data.backstory;
 };
 
 const getRecipe = async ({ ingredients }) => {
@@ -22,8 +26,8 @@ const getRecipe = async ({ ingredients }) => {
       },
     }
   );
-  
+
   return response.data.recipe;
 };
 
-export default { getCharacter, getRecipe };
+export default { getCharacter, getBackstory, getRecipe };
