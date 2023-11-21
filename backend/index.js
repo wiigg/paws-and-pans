@@ -69,7 +69,6 @@ const server = Bun.serve({
     }
 
     if (url.pathname === "/api/generaterecipe") {
-      console.log(req);
       const body = await req.json();
       const ingredientsList = body.ingredients;
 
